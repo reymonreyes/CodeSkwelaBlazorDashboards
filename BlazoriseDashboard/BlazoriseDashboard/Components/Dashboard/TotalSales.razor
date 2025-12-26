@@ -1,0 +1,29 @@
+﻿@using BlazorDashboards.Services
+@using System.Globalization
+
+<LoadingIndicator @bind-Visible="_loadingIndicator">
+    <Card Background="Background.Success" WhiteText>
+        <CardBody>
+            <Text TextWeight="TextWeight.Bold">Total Sales @DateTime.Now.ToShortDateString()</Text>
+            <Paragraph TextSize="TextSize.ExtraLarge" TextWeight="TextWeight.Bold" TextAlignment="TextAlignment.End">
+                @_totalSales.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))
+            </Paragraph>
+        </CardBody>
+    </Card>
+</LoadingIndicator>
+
+@code {
+    private decimal _totalSales;
+    private bool _loadingIndicator;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            var reportService = new ReportService();
+            _loadingIndicator = true;
+            _totalSales = await reportService.GetTotalSalesOfTheDay();
+            _loadingIndicator = false;
+        }
+    }
+}

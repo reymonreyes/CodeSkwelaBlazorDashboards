@@ -1,0 +1,28 @@
+﻿@using System.Globalization
+@using BlazorDashboards.Services
+<LoadingIndicator @bind-Visible="_loadingIndicator">
+    <Card Background="Background.Primary" WhiteText>
+        <CardBody>
+            <Text TextWeight="TextWeight.Bold">Total Orders @DateTime.Now.ToShortDateString()</Text>
+            <Paragraph TextSize="TextSize.ExtraLarge" TextWeight="TextWeight.Bold" TextAlignment="TextAlignment.End">
+                @_totalOrders
+            </Paragraph>
+        </CardBody>
+    </Card>
+</LoadingIndicator>
+
+@code {
+    private decimal _totalOrders;
+    private bool _loadingIndicator;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            var reportService = new ReportService();
+            _loadingIndicator = true;
+            _totalOrders = await reportService.GetTotalOrdersOfTheDay();
+            _loadingIndicator = false;
+        }
+    }
+}

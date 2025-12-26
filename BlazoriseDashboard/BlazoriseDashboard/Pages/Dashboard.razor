@@ -1,34 +1,18 @@
 ﻿@page "/"
+@using BlazorDashboards.Services
+@using System.Globalization
+@using BlazoriseDashboard.Components.Dashboard
 @inject IVersionProvider VersionProvider
-<Heading Size="HeadingSize.Is1" Margin="Margin.Is3.FromBottom">Blazorise Dashboard</Heading>
 
 <Row HorizontalGutter="10" VerticalGutter="30">
     <Column ColumnSize="ColumnSize.Is4">
-        <Card Background="Background.Success" WhiteText>
-            <CardBody>                
-                <CardText>
-                    Total Sales
-                </CardText>                
-            </CardBody>
-        </Card>
+        <TotalSales></TotalSales>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
-        <Card Background="Background.Primary" WhiteText>
-            <CardBody>
-                <CardText>
-                    Total Orders
-                </CardText>
-            </CardBody>
-        </Card>
+        <TotalOrders></TotalOrders>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
-        <Card Background="Background.Warning" WhiteText>
-            <CardBody>
-                <CardText>
-                    Total Total Shipped
-                </CardText>
-            </CardBody>
-        </Card>
+        <TotalOrdersShipped></TotalOrdersShipped>
     </Column>
 </Row>
 <Row HorizontalGutter="10" VerticalGutter="30">
@@ -80,3 +64,7 @@
         </Card>
     </Column>
 </Row>
+
+@code{
+            
+}

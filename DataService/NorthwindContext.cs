@@ -10,7 +10,7 @@ namespace BlazorDashboards.Data
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(System.IO.Path.GetDirectoryName(Environment.ProcessPath), "Data\\northwind.db");
+            DbPath = System.IO.Path.Join(System.IO.Path.GetDirectoryName(Environment.ProcessPath), "northwind.db");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
