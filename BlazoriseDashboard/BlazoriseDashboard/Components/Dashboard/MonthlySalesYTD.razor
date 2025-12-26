@@ -1,0 +1,36 @@
+﻿@using BlazorDashboards.Services
+
+<Card>
+    <CardBody>
+        <Text>Monthly Sales YTD</Text>
+        <LoadingIndicator @bind-Visible="_loadingIndicator">
+            <LineChart @ref="_lineChart" TItem="double" />
+        </LoadingIndicator>
+    </CardBody>
+</Card>
+
+@code {
+    LineChart<double> _lineChart;
+    private bool _loadingIndicator;
+    private string[] _labels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _loadingIndicator = true;
+
+            var reportService = new ReportService();
+            var monthlySalesYtd = await reportService.GetMonthlySalesYtd();
+            var lineChartDataset = new LineChartDataset<double>();
+            lineChartDataset.Label = "Monthly Sales";
+            lineChartDataset.Data = monthlySalesYtd.Select(x => (double)x.Total).ToList();
+            lineChartDataset.BorderColor = new List<string> { ChartColor.FromRgba(0, 0, 255, 1) };
+
+            await _lineChart.Clear();
+            await _lineChart.AddLabelsDatasetsAndUpdate(_labels, lineChartDataset);
+
+            _loadingIndicator = false;
+        }
+    }    
+}
