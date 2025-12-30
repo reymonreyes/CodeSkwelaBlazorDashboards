@@ -1,0 +1,45 @@
+﻿@using BlazorDashboards.Services
+@using BlazorDashboards.Services.Dtos
+<Card>
+    <CardBody>
+        <Text>Top 10 Customers of @DateTime.Now.ToString("MMMM yyyy")</Text>
+        <LoadingIndicator @bind-Visible="_loadingIndicator">
+            <Table>
+                <TableHeader>
+                    <TableRow><TableHeaderCell>#</TableHeaderCell><TableHeaderCell>Customer</TableHeaderCell><TableHeaderCell>Total</TableHeaderCell></TableRow>
+                </TableHeader>
+                <TableBody>
+                    @for (int i = 0; i < _customerSales.Count; i++)
+                    {
+                        //https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/navigation?view=aspnetcore-10.0
+                        var x = i;
+                        var product = _customerSales[i];
+                        <TableRow>
+                            <TableRowCell>@(x + 1)</TableRowCell>
+                            <TableRowCell>@product.CustomerName</TableRowCell>
+                            <TableRowCell>@product.Total.ToString("$#,#.00")</TableRowCell>
+                        </TableRow>
+                    }
+                </TableBody>
+            </Table>
+        </LoadingIndicator>
+    </CardBody>
+</Card>
+
+@code {
+    private bool _loadingIndicator;
+    private List<CustomerSales> _customerSales = new List<CustomerSales>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _loadingIndicator = true;
+
+            var reportService = new ReportService();
+            _customerSales = await reportService.GetTop10CustomersOfMonth();
+
+            _loadingIndicator = false;
+        }
+    }
+}

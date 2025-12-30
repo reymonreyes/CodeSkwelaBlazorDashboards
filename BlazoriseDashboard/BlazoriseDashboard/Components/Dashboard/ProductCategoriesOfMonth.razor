@@ -1,0 +1,35 @@
+﻿@using BlazorDashboards.Services
+<Card>
+    <CardBody>
+        <Text>Product Categories @DateTime.Now.ToString("MMMM yyyy")</Text>
+        <LoadingIndicator @bind-Visible="_loadingIndicator">
+            <PieChart @ref="_pieChart" TItem="double"></PieChart>
+        </LoadingIndicator>
+    </CardBody>
+</Card>
+
+@code {
+    private bool _loadingIndicator;
+    private PieChart<double> _pieChart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _loadingIndicator = true;
+
+            var reportService = new ReportService();
+            var productCategories = await reportService.GetCurrentMonthlySalesByProductCategory();
+            var pieChartDataset = new PieChartDataset<double>();
+            pieChartDataset.Data = productCategories.Select(x => (double)x.Total).ToList();
+            var labels = productCategories.Select(x => x.CategoryName).ToArray();
+            var random = new Random();
+            pieChartDataset.BackgroundColor = productCategories.Select(x => ChartColor.FromRgba((byte)random.Next(255), (byte)random.Next(255), (byte)random.Next(255), 1).ToJsRgba()).ToList();
+
+            await _pieChart.Clear();
+            await _pieChart.AddLabelsDatasetsAndUpdate(labels, pieChartDataset);
+
+            _loadingIndicator = false;
+        }
+    }
+}

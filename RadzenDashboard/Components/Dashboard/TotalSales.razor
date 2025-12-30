@@ -1,0 +1,33 @@
+﻿@using BlazorDashboards.Services
+@using System.Globalization
+    
+<RadzenCard class="rz-background-color-success">
+    <RadzenText class="rz-color-white">Total Sales @DateTime.Now.ToShortDateString()</RadzenText>
+    @if (_isLoading)
+    {
+        <RadzenText TextAlign="TextAlign.Right" TextStyle="TextStyle.H5">
+            <RadzenSkeleton Animation="SkeletonAnimation.Wave" />
+        </RadzenText>
+    }
+    else
+    {        
+        <RadzenText class="rz-color-white" TextStyle="TextStyle.H5" TextAlign="TextAlign.Right">@_totalSales.ToString("C", CultureInfo.CreateSpecificCulture("en-US"))</RadzenText>
+    }
+</RadzenCard>
+
+@code {
+    private decimal _totalSales;
+    private bool _isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _isLoading = true;
+            var reportService = new ReportService();
+
+            _totalSales = await reportService.GetTotalSalesOfTheDay();
+            _isLoading = false;
+        }
+    }
+}

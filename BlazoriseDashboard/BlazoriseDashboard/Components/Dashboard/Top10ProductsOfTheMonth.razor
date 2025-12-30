@@ -1,0 +1,44 @@
+﻿@using BlazorDashboards.Services
+@using BlazorDashboards.Services.Dtos
+<Card>
+    <CardBody>
+        <Text>Top 10 Products of @DateTime.Now.ToString("MMMM yyyy")</Text>
+        <LoadingIndicator @bind-Visible="_loadingIndicator">
+            <Table>
+                <TableHeader>
+                    <TableRow><TableHeaderCell>#</TableHeaderCell><TableHeaderCell>Product</TableHeaderCell><TableHeaderCell>Total</TableHeaderCell></TableRow>
+                </TableHeader>
+                <TableBody>                    
+                    @for (int i = 0; i < _productSales.Count; i++)
+                    {
+                        var x = i;
+                        var product = _productSales[i];
+                        <TableRow>
+                            <TableRowCell>@(x+1)</TableRowCell>
+                            <TableRowCell>@product.ProductName</TableRowCell>
+                            <TableRowCell>@product.Total.ToString("$#,#.00")</TableRowCell>
+                        </TableRow>
+                    }
+                </TableBody>
+            </Table>
+        </LoadingIndicator>
+    </CardBody>
+</Card>
+
+@code {
+    private bool _loadingIndicator;
+    private List<ProductSales> _productSales = new List<ProductSales>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _loadingIndicator = true;
+
+            var reportService = new ReportService();
+            _productSales = await reportService.GetTop10ProductsOfMonth();
+
+            _loadingIndicator = false;
+        }
+    }
+}

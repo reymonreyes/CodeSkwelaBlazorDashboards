@@ -1,0 +1,42 @@
+﻿@using BlazorDashboards.Services
+<Card>
+    <CardBody>
+        <Text>Monthly Orders Made/Orders Shipped YTD</Text>
+        <LoadingIndicator @bind-Visible="_loadingIndicator">
+            <BarChart @ref="_barChart" TItem="double" />
+        </LoadingIndicator>
+    </CardBody>
+</Card>
+
+@code {
+    private bool _loadingIndicator;
+    private BarChart<double> _barChart;
+    private string[] _labels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _loadingIndicator = true;
+
+            var reportService = new ReportService();
+            var monthlyOrdersYtd = await reportService.GetMonthlyOrdersYtd();
+            var monthlyOrdersShippedYtd = await reportService.GetMonthlyOrdersShippedYtd();
+
+            var monthlyOrdersDataset = new BarChartDataset<double>();
+            monthlyOrdersDataset.Label = "Monthly Orders";
+            monthlyOrdersDataset.Data = monthlyOrdersYtd.Select(x => (double)x.Total).ToList();
+            monthlyOrdersDataset.BackgroundColor = new List<string> { ChartColor.FromRgba(255, 0, 0,1) };
+
+            var monthlyOrdersShippedDataset = new BarChartDataset<double>();
+            monthlyOrdersShippedDataset.Label = "Monthly Orders Shipped";
+            monthlyOrdersShippedDataset.Data = monthlyOrdersShippedYtd.Select(x => (double)x.Total).ToList();
+            monthlyOrdersShippedDataset.BackgroundColor = new List<string> { ChartColor.FromRgba(0, 255, 0, 1) };
+
+            await _barChart.Clear();
+            await _barChart.AddLabelsDatasetsAndUpdate(_labels, monthlyOrdersDataset, monthlyOrdersShippedDataset);
+
+            _loadingIndicator = false;
+        }
+    }
+}

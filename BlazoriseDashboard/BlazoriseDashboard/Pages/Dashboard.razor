@@ -1,0 +1,41 @@
+﻿@page "/"
+@using BlazorDashboards.Services
+@using System.Globalization
+@using BlazoriseDashboard.Components.Dashboard
+@inject IVersionProvider VersionProvider
+
+<Row HorizontalGutter="10" VerticalGutter="30">
+    <Column ColumnSize="ColumnSize.Is4">
+        <TotalSales></TotalSales>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4">
+        <TotalOrders></TotalOrders>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4">
+        <TotalOrdersShipped></TotalOrdersShipped>
+    </Column>
+</Row>
+<Row HorizontalGutter="10" VerticalGutter="30">
+    <Column ColumnSize="ColumnSize.Is6">
+        <MonthlySalesYTD></MonthlySalesYTD>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is6">
+        <MonthlyOrdersAndOrdersShippedYTD></MonthlyOrdersAndOrdersShippedYTD>        
+    </Column>
+</Row>
+<Row HorizontalGutter="10" VerticalGutter="30">
+    <Column ColumnSize="ColumnSize.Is3">
+        <ProductCategoriesOfMonth></ProductCategoriesOfMonth>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4">
+        <Top10ProductsOfTheMonth></Top10ProductsOfTheMonth>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is5">
+        <Top10CustomersOfTheMonth></Top10CustomersOfTheMonth>
+    </Column>
+</Row>
+
+@code{    
+
+
+}

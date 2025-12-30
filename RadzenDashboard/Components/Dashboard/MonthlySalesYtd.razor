@@ -1,0 +1,47 @@
+﻿@using BlazorDashboards.Services
+@using BlazorDashboards.Services.Dtos
+@using System.Globalization
+<RadzenCard class="">
+    <RadzenText>Total Sales YTD</RadzenText>
+    @if (_isLoading)
+    {
+        <RadzenText TextAlign="TextAlign.Center">
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" AriaLabel="Loading progress" />
+        </RadzenText>
+    }
+    else
+    {           
+        <RadzenChart>
+            <RadzenChartTooltipOptions Visible="true"></RadzenChartTooltipOptions>
+            <RadzenLegend Position="LegendPosition.Top"></RadzenLegend>
+            <RadzenLineSeries Data="@_monthlySales" LineType="LineType.Solid" ValueProperty="Total" CategoryProperty="MonthName" Title="Monthly Sales">
+                <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle"></RadzenMarkers>
+            </RadzenLineSeries>
+            <RadzenCategoryAxis></RadzenCategoryAxis>
+            <RadzenValueAxis Formatter="@FormatAsUSD">
+                <RadzenGridLines Visible="true"></RadzenGridLines>
+            </RadzenValueAxis>
+        </RadzenChart>
+    }
+</RadzenCard>
+
+@code {
+    private List<MonthlyData> _monthlySales = new List<MonthlyData>();
+    private bool _isLoading;
+
+    private string FormatAsUSD(object value)
+    {
+        return ((double)value).ToString("C", CultureInfo.CreateSpecificCulture("en-US"));
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _isLoading = true;
+            var reportService = new ReportService();
+            _monthlySales = await reportService.GetMonthlySalesYtd();
+            _isLoading = false;
+        }
+    }
+}

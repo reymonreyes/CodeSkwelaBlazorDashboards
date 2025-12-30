@@ -1,0 +1,52 @@
+﻿@page "/"
+@using RadzenDashboard.Components.Dashboard
+
+<RadzenRow class="rz-mb-5">
+    <RadzenColumn>
+        <TotalSales></TotalSales>
+    </RadzenColumn>
+    <RadzenColumn>
+        <TotalOrders></TotalOrders>
+    </RadzenColumn>
+    <RadzenColumn>
+        <TotalOrdersShipped></TotalOrdersShipped>
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow class="rz-mb-5">
+    <RadzenColumn>
+        <MonthlySalesYtd></MonthlySalesYtd>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenText>Monthly Orders Mades/Shipped YTD Bar Chart</RadzenText>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow class="rz-mb-5">
+    <RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenText>Product Categorie Pie Chart</RadzenText>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenText>Top 10 Products</RadzenText>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenColumn>
+            <RadzenCard>
+                <RadzenText>Top 10 Customers</RadzenText>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenColumn>
+</RadzenRow>
+@code {
+
+}

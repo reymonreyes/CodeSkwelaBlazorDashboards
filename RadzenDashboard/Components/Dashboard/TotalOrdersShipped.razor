@@ -1,0 +1,33 @@
+﻿@using BlazorDashboards.Services
+@using System.Globalization
+
+<RadzenCard class="rz-background-color-warning">
+    <RadzenText class="rz-color-white">Total Shipped @DateTime.Now.ToShortDateString()</RadzenText>
+    @if (_isLoading)
+    {
+        <RadzenText TextAlign="TextAlign.Right" TextStyle="TextStyle.H5">
+            <RadzenSkeleton Animation="SkeletonAnimation.Wave" />
+        </RadzenText>
+    }
+    else
+    {
+        <RadzenText class="rz-color-white" TextStyle="TextStyle.H5" TextAlign="TextAlign.Right">@_totalShipped</RadzenText>
+    }
+</RadzenCard>
+
+@code {
+    private int _totalShipped;
+    private bool _isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _isLoading = true;
+            var reportService = new ReportService();
+
+            _totalShipped = await reportService.GetTotalShippedOrdersOfTheDay();
+            _isLoading = false;
+        }
+    }
+}
