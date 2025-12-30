@@ -1,0 +1,34 @@
+﻿@using BlazorDashboards.Services
+@using BlazorDashboards.Services.Dtos
+@using System.Globalization
+<RadzenCard class="">
+    <RadzenText>Sales by Product Categories @DateTime.Now.ToString("MMMM yyyy")</RadzenText>
+    @if (_isLoading)
+    {
+        <RadzenText TextAlign="TextAlign.Center">
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" AriaLabel="Loading progress" />
+        </RadzenText>
+    }
+    else
+    {
+        <RadzenChart>
+            <RadzenPieSeries Data="@_monthlySalesByCategories" ValueProperty="Total" CategoryProperty="CategoryName" Title="Sales"></RadzenPieSeries>
+        </RadzenChart>
+    }
+</RadzenCard>
+
+@code {
+    private List<ProductCategorySales> _monthlySalesByCategories = new List<ProductCategorySales>();
+    private bool _isLoading;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _isLoading = true;
+            var reportService = new ReportService();
+            _monthlySalesByCategories = await reportService.GetCurrentMonthlySalesByProductCategory();
+            _isLoading = false;
+        }
+    }
+}

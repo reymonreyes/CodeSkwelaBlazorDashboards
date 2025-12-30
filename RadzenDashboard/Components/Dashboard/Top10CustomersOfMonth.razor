@@ -1,0 +1,54 @@
+﻿@using BlazorDashboards.Services
+@using BlazorDashboards.Services.Dtos
+
+<RadzenCard class="">
+    <RadzenText>Top 10 Customers @DateTime.Now.ToString("MMMM yyyy")</RadzenText>
+    @if (_isLoading)
+    {
+        <RadzenText TextAlign="TextAlign.Center">
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" AriaLabel="Loading progress" />
+        </RadzenText>
+    }
+    else
+    {
+        <RadzenTable GridLines="DataGridGridLines.Both">
+            <RadzenTableHeader>
+                <RadzenTableHeaderRow>
+                    <RadzenTableHeaderCell Style="width: 50px">#</RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>Product</RadzenTableHeaderCell>
+                    <RadzenTableHeaderCell>Total</RadzenTableHeaderCell>
+                </RadzenTableHeaderRow>
+            </RadzenTableHeader>
+            <RadzenTableBody>
+                @for (int i = 0; i < _top10Customers.Count; i++)
+                {
+                    var row = i + 1;
+                    var customer = _top10Customers[i];
+                    <RadzenTableRow>
+                        <RadzenTableCell>@row</RadzenTableCell>
+                        <RadzenTableCell>@customer.CustomerName</RadzenTableCell>
+                        <RadzenTableCell>@customer.Total</RadzenTableCell>
+                    </RadzenTableRow>
+                }
+            </RadzenTableBody>
+        </RadzenTable>
+    }
+</RadzenCard>
+
+@code {
+    private List<CustomerSales> _top10Customers = new List<CustomerSales>();
+    private bool _isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RendererInfo.IsInteractive)
+        {
+            _isLoading = true;
+
+            var reportService = new ReportService();
+            _top10Customers = await reportService.GetTop10CustomersOfMonth();
+
+            _isLoading = false;
+        }
+    }
+}

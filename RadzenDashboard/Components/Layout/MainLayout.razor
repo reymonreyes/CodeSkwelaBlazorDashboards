@@ -3,10 +3,19 @@
 <RadzenComponents @rendermode="InteractiveAuto"></RadzenComponents>
 <RadzenLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-            <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
-            <RadzenLabel Text="Radzen Dashboard" />
-        </RadzenStack>
+        <RadzenRow AlignItems="AlignItems.Center" Style="width: 100%">
+            <RadzenColumn>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                    <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+                    <RadzenLabel Text="Radzen Dashboard" />
+                </RadzenStack>
+            </RadzenColumn>
+            <RadzenColumn Class="rz-text-align-right">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End" JustifyContent="JustifyContent.End" Gap="2rem" Wrap="FlexWrap.Wrap" class="rz-pr-1">
+                    <RadzenAppearanceToggle />
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>        
     </RadzenHeader>
     <RadzenSidebar Responsive="false" Style="width: max-content">
         <RadzenPanelMenu DisplayStyle="@(sidebarExpanded? MenuItemDisplayStyle.IconAndText: MenuItemDisplayStyle.Icon)" ShowArrow="false">
@@ -21,10 +30,7 @@
         <div class="rz-p-4">
             @Body
         </div>
-    </RadzenBody>
-    <RadzenFooter>
-        Footer
-    </RadzenFooter>
+    </RadzenBody>    
 </RadzenLayout>
 
 @code {
