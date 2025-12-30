@@ -2,7 +2,7 @@
 @using BlazorDashboards.Services.Dtos
 @using System.Globalization
 <RadzenCard class="">
-    <RadzenText>Monthly Sales YTD</RadzenText>
+    <RadzenText>Monthly Orders Made/Orders Shipped YTD</RadzenText>
     @if (_isLoading)
     {
         <RadzenText TextAlign="TextAlign.Center">
@@ -10,23 +10,18 @@
         </RadzenText>
     }
     else
-    {           
+    {
         <RadzenChart>
-            <RadzenChartTooltipOptions Visible="true"></RadzenChartTooltipOptions>
             <RadzenLegend Position="LegendPosition.Top"></RadzenLegend>
-            <RadzenLineSeries Data="@_monthlySales" LineType="LineType.Solid" ValueProperty="Total" CategoryProperty="MonthName" Title="Monthly Sales">
-                <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle"></RadzenMarkers>
-            </RadzenLineSeries>
-            <RadzenCategoryAxis></RadzenCategoryAxis>
-            <RadzenValueAxis Formatter="@FormatAsUSD">
-                <RadzenGridLines Visible="true"></RadzenGridLines>
-            </RadzenValueAxis>
+            <RadzenColumnSeries Data="@_monthlyOrders" LineType="LineType.Solid" ValueProperty="Total" CategoryProperty="MonthName" Title="Monthly Orders"></RadzenColumnSeries>
+            <RadzenColumnSeries Data="@_monthlyOrdersShipped" LineType="LineType.Solid" ValueProperty="Total" CategoryProperty="MonthName" Title="Monthly Orders Shipped"></RadzenColumnSeries>            
         </RadzenChart>
     }
 </RadzenCard>
 
 @code {
-    private List<MonthlyData> _monthlySales = new List<MonthlyData>();
+    private List<MonthlyData> _monthlyOrders = new List<MonthlyData>();
+    private List<MonthlyData> _monthlyOrdersShipped = new List<MonthlyData>();
     private bool _isLoading;
 
     private string FormatAsUSD(object value)
@@ -40,7 +35,8 @@
         {
             _isLoading = true;
             var reportService = new ReportService();
-            _monthlySales = await reportService.GetMonthlySalesYtd();
+            _monthlyOrders = await reportService.GetMonthlyOrdersYtd();
+            _monthlyOrdersShipped = await reportService.GetMonthlyOrdersShippedYtd();
             _isLoading = false;
         }
     }
